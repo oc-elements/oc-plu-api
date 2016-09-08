@@ -1,34 +1,46 @@
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/oc-core-utils/oc-api-provider-behaviour.html">
 
 <!--
-`oc-plu-api`
-Element for consuming the Ordercloud PLU API
-
-@demo demo/index.html 
+`<oc-plu-api>` is used to make requests with Ordercloud's PLU api.
 -->
-
 <dom-module id="oc-plu-api">
+
   <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <h2>Hello [[prop1]]</h2>
+    <iron-ajax id="downloadCsv" handle-as="text"></iron-ajax>
+    <iron-ajax id="uploadCsv" method="post"></iron-ajax>
   </template>
 
   <script>
     Polymer({
-
       is: 'oc-plu-api',
+      behaviors: [OC.Behaviours.ApiProvider],
 
-      properties: {
-        prop1: {
-          type: String,
-          value: 'oc-plu-api',
-        },
+      downloadCsv: function(organisationId, productType) {
+        this.$.downloadCsv.url = this._url(
+                'plu/' + (productType === 'library' ? 'library/' : '') + 'organisation/' + organisationId
+        );
+        return this._generateRequest(this.$.downloadCsv);
       },
+
+      uploadCsv: function(organisationId, file, productType) {
+        this.$.uploadCsv.url = this._url(
+                'plu/' + (productType === 'library' ? 'library/' : '') +
+                'organisation/' + organisationId +
+                (productType === 'library' ? '' : '/upload')
+        );
+        this.$.uploadCsv.body = this._toFormData('csvfile', file);
+        return this._generateRequest(this.$.uploadCsv);
+      },
+
+      _toFormData: function(name, file) {
+        var formData = new FormData();
+        formData.append(name, file);
+        return formData;
+      }
 
     });
   </script>
+
 </dom-module>
