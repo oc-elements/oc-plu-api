@@ -1,0 +1,34 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`oc-plu-api`
+Element for consuming the Ordercloud PLU API
+
+@demo demo/index.html 
+-->
+
+<dom-module id="oc-plu-api">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h2>Hello [[prop1]]</h2>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'oc-plu-api',
+
+      properties: {
+        prop1: {
+          type: String,
+          value: 'oc-plu-api',
+        },
+      },
+
+    });
+  </script>
+</dom-module>
